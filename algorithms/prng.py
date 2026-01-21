@@ -341,7 +341,8 @@ def show_prng_interface(root, algo_type, subtype, back_command, bg_color, button
             new_x = X[18] ^ X[17] ^ X[16] ^ X[13] ^ 1
             new_y = Y[21] ^ Y[20] ^ 1
             new_z = Z[22] ^ Z[21] ^ Z[20] ^ Z[7] ^ 1
-            
+
+
             # Registrlarni siljitish
             X = shift_register(X, new_x)
             Y = shift_register(Y, new_y)
