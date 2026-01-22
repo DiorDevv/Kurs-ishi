@@ -14,6 +14,7 @@ from algorithms import asymmetric
 from algorithms import authentication
 
 
+
 class CryptoApp:
     def __init__(self):
         self.root = tk.Tk()
