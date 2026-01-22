@@ -255,7 +255,7 @@ class CryptoApp:
     def show_signature(self, algorithm):
         self.clear_window()
         digital_signature.show_signature_interface(
-            self.root, algorithm, self.show_eri_section,
+            self.root, algorithm, self.show_eri_section, self.show_main_menu,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
@@ -317,7 +317,7 @@ class CryptoApp:
         self.clear_window()
         prng.show_prng_interface(
             self.root, algo_type, subtype,
-            self.show_prng_menu, self.bg_color,
+            self.show_prng_menu, self.show_main_menu, self.bg_color,
             self.button_color, self.text_color,
             self.accent_color
         )
@@ -341,7 +341,7 @@ class CryptoApp:
     def show_hash_algo(self, algorithm):
         self.clear_window()
         hash_functions.show_hash_interface(
-            self.root, algorithm, self.show_sha_section,
+            self.root, algorithm, self.show_sha_section, self.show_main_menu,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
@@ -378,7 +378,7 @@ class CryptoApp:
     def show_cipher(self, algorithm):
         self.clear_window()
         symmetric.show_symmetric_interface(
-            self.root, algorithm, self.show_symmetric,
+            self.root, algorithm, self.show_symmetric, self.show_main_menu,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
@@ -398,7 +398,7 @@ class CryptoApp:
     def show_stream_cipher(self, algorithm):
         self.clear_window()
         stream_cipher.show_stream_interface(
-            self.root, algorithm, self.show_stream,
+            self.root, algorithm, self.show_stream, self.show_main_menu,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
@@ -418,7 +418,7 @@ class CryptoApp:
     def show_asymmetric_cipher(self, algorithm):
         self.clear_window()
         asymmetric.show_asymmetric_interface(
-            self.root, algorithm, self.show_asymmetric,
+            self.root, algorithm, self.show_asymmetric, self.show_main_menu,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
@@ -439,7 +439,7 @@ class CryptoApp:
     def show_auth_protocol(self, protocol):
         self.clear_window()
         authentication.show_auth_interface(
-            self.root, protocol, self.show_auth,
+            self.root, protocol, self.show_auth, self.show_main_menu,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 

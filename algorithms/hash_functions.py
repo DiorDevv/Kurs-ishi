@@ -5,23 +5,50 @@ import hmac
 import base64
 import binascii
 
-def show_hash_interface(root, algorithm, back_command, bg_color, button_color, text_color, accent_color):
+def show_hash_interface(root, algorithm, back_command, home_command, bg_color, button_color, text_color, accent_color):
     """Hash funksiyalari interfeysi"""
+
+    # Navigation frame
+    nav_frame = tk.Frame(root, bg=bg_color)
+    nav_frame.place(x=20, y=20)
 
     # Orqaga button
     back_btn = tk.Button(
-        root,
+        nav_frame,
         text="← Orqaga",
         command=back_command,
         bg=button_color,
         fg=text_color,
-        font=("Segoe UI", 10),
+        font=("Segoe UI", 12, "bold"),
         relief=tk.FLAT,
-        padx=15,
-        pady=8,
-        cursor="hand2"
+        padx=18,
+        pady=10,
+        cursor="hand2",
+        activebackground="#103a7a",
+        activeforeground=text_color
     )
-    back_btn.place(x=20, y=20)
+    back_btn.pack(side="left", padx=(0, 10))
+    back_btn.bind("<Enter>", lambda e: back_btn.config(bg="#103a7a"))
+    back_btn.bind("<Leave>", lambda e: back_btn.config(bg=button_color))
+
+    # Bosh sahifa button
+    home_btn = tk.Button(
+        nav_frame,
+        text="🏠 Bosh sahifa",
+        command=home_command,
+        bg="#10b981",
+        fg=text_color,
+        font=("Segoe UI", 12, "bold"),
+        relief=tk.FLAT,
+        padx=18,
+        pady=10,
+        cursor="hand2",
+        activebackground="#059669",
+        activeforeground=text_color
+    )
+    home_btn.pack(side="left")
+    home_btn.bind("<Enter>", lambda e: home_btn.config(bg="#059669"))
+    home_btn.bind("<Leave>", lambda e: home_btn.config(bg="#10b981"))
 
     # Algoritm ma'lumotlari
     algo_info = {
@@ -53,21 +80,21 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     title = tk.Label(
         root,
         text=info["name"],
-        font=("Segoe UI", 18, "bold"),
+        font=("Segoe UI", 24, "bold"),
         bg=bg_color,
         fg=accent_color
     )
-    title.pack(pady=(30, 5))
+    title.pack(pady=(70, 8))
 
     # Tavsif
     desc = tk.Label(
         root,
         text=info["description"],
-        font=("Segoe UI", 10),
+        font=("Segoe UI", 13),
         bg=bg_color,
         fg=text_color
     )
-    desc.pack(pady=(0, 10))
+    desc.pack(pady=(0, 15))
 
     # Asosiy container
     container = tk.Frame(root, bg=bg_color)
@@ -77,10 +104,10 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     settings_frame = tk.LabelFrame(
         container,
         text="Sozlamalar",
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         bg=bg_color,
         fg=text_color,
-        relief=tk.FLAT,
+        relief=tk.GROOVE,
         bd=2
     )
     settings_frame.pack(fill="x", pady=(0, 10))
@@ -89,10 +116,10 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     input_frame = tk.LabelFrame(
         container,
         text="Kirish",
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         bg=bg_color,
         fg=text_color,
-        relief=tk.FLAT,
+        relief=tk.GROOVE,
         bd=2
     )
     input_frame.pack(fill="both", expand=True, pady=(0, 10))
@@ -101,10 +128,10 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     output_frame = tk.LabelFrame(
         container,
         text="Hash Natijasi",
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         bg=bg_color,
         fg=text_color,
-        relief=tk.FLAT,
+        relief=tk.GROOVE,
         bd=2
     )
     output_frame.pack(fill="both", expand=True)
@@ -117,7 +144,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     format_label = tk.Label(
         settings_inner,
         text="Chiqish formati:",
-        font=("Segoe UI", 9),
+        font=("Segoe UI", 12, "bold"),
         bg=bg_color,
         fg=text_color
     )
@@ -130,7 +157,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         values=["Hex", "Base64", "Binary"],
         width=12,
         state="readonly",
-        font=("Segoe UI", 9)
+        font=("Segoe UI", 11)
     )
     format_combo.grid(row=0, column=1, padx=(0, 20))
 
@@ -140,7 +167,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         settings_inner,
         text="HMAC ishlatish",
         variable=use_hmac_var,
-        font=("Segoe UI", 9),
+        font=("Segoe UI", 12, "bold"),
         bg=bg_color,
         fg=text_color,
         selectcolor=button_color,
@@ -153,7 +180,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     hmac_key_label = tk.Label(
         settings_inner,
         text="HMAC kaliti:",
-        font=("Segoe UI", 9),
+        font=("Segoe UI", 12, "bold"),
         bg=bg_color,
         fg=text_color
     )
@@ -161,7 +188,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
 
     hmac_key_entry = tk.Entry(
         settings_inner,
-        font=("Consolas", 9),
+        font=("Consolas", 12),
         bg=button_color,
         fg=text_color,
         insertbackground=text_color,
@@ -178,15 +205,15 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     input_label = tk.Label(
         input_frame,
         text="Xabar:",
-        font=("Segoe UI", 9),
+        font=("Segoe UI", 12, "bold"),
         bg=bg_color,
         fg=text_color
     )
-    input_label.pack(anchor="w", padx=10, pady=(5, 0))
+    input_label.pack(anchor="w", padx=12, pady=(8, 0))
 
     input_text = scrolledtext.ScrolledText(
         input_frame,
-        font=("Consolas", 10),
+        font=("Consolas", 13),
         bg=button_color,
         fg=text_color,
         relief=tk.FLAT,
@@ -195,13 +222,13 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         height=8,
         insertbackground=text_color
     )
-    input_text.pack(fill="both", expand=True, padx=10, pady=(5, 10))
+    input_text.pack(fill="both", expand=True, padx=12, pady=(8, 12))
     input_text.insert("1.0", "Hello, World!")
 
     # Output matn
     output_text = scrolledtext.ScrolledText(
         output_frame,
-        font=("Consolas", 10),
+        font=("Consolas", 13),
         bg=button_color,
         fg=text_color,
         relief=tk.FLAT,
@@ -210,7 +237,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         height=8,
         insertbackground=text_color
     )
-    output_text.pack(fill="both", expand=True, padx=10, pady=10)
+    output_text.pack(fill="both", expand=True, padx=12, pady=12)
 
     # Hash hisoblash
     def calculate_hash():
@@ -455,14 +482,14 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         command=calculate_hash,
         bg=accent_color,
         fg=text_color,
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         relief=tk.FLAT,
-        padx=25,
-        pady=10,
+        padx=30,
+        pady=12,
         cursor="hand2",
         activebackground="#c93850"
     )
-    calc_btn.pack(side="left", padx=5)
+    calc_btn.pack(side="left", padx=8)
 
     compare_btn = tk.Button(
         button_frame,
@@ -470,14 +497,14 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         command=compare_hash,
         bg="#3b82f6",
         fg=text_color,
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         relief=tk.FLAT,
-        padx=25,
-        pady=10,
+        padx=30,
+        pady=12,
         cursor="hand2",
         activebackground="#2563eb"
     )
-    compare_btn.pack(side="left", padx=5)
+    compare_btn.pack(side="left", padx=8)
 
     copy_btn = tk.Button(
         button_frame,
@@ -485,14 +512,14 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         command=copy_hash,
         bg="#8b5cf6",
         fg=text_color,
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         relief=tk.FLAT,
-        padx=25,
-        pady=10,
+        padx=30,
+        pady=12,
         cursor="hand2",
         activebackground="#7c3aed"
     )
-    copy_btn.pack(side="left", padx=5)
+    copy_btn.pack(side="left", padx=8)
 
     clear_btn = tk.Button(
         button_frame,
@@ -500,10 +527,10 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         command=clear_all,
         bg=button_color,
         fg=text_color,
-        font=("Segoe UI", 11, "bold"),
+        font=("Segoe UI", 14, "bold"),
         relief=tk.FLAT,
-        padx=25,
-        pady=10,
+        padx=30,
+        pady=12,
         cursor="hand2"
     )
-    clear_btn.pack(side="left", padx=5)
+    clear_btn.pack(side="left", padx=8)
