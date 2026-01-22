@@ -376,7 +376,7 @@ class CryptoApp:
             items=items,
             back_command=self.show_keygen_section
         )
-
+    # test
     def show_cipher(self, algorithm):
         self.clear_window()
         symmetric.show_symmetric_interface(
