@@ -7,7 +7,7 @@ import binascii
 
 def show_hash_interface(root, algorithm, back_command, bg_color, button_color, text_color, accent_color):
     """Hash funksiyalari interfeysi"""
-    
+
     # Orqaga button
     back_btn = tk.Button(
         root,
@@ -22,7 +22,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         cursor="hand2"
     )
     back_btn.place(x=20, y=20)
-    
+
     # Algoritm ma'lumotlari
     algo_info = {
         "md5": {
@@ -46,9 +46,9 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
             "description": "512-bit hash, eng xavfsiz"
         }
     }
-    
+
     info = algo_info[algorithm]
-    
+
     # Sarlavha
     title = tk.Label(
         root,
@@ -58,7 +58,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         fg=accent_color
     )
     title.pack(pady=(30, 5))
-    
+
     # Tavsif
     desc = tk.Label(
         root,
@@ -68,11 +68,11 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         fg=text_color
     )
     desc.pack(pady=(0, 10))
-    
+
     # Asosiy container
     container = tk.Frame(root, bg=bg_color)
     container.pack(expand=True, fill="both", padx=40, pady=(10, 10))
-    
+
     # Yuqori panel - Sozlamalar
     settings_frame = tk.LabelFrame(
         container,
@@ -84,7 +84,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         bd=2
     )
     settings_frame.pack(fill="x", pady=(0, 10))
-    
+
     # Input frame
     input_frame = tk.LabelFrame(
         container,
@@ -96,7 +96,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         bd=2
     )
     input_frame.pack(fill="both", expand=True, pady=(0, 10))
-    
+
     # Output frame
     output_frame = tk.LabelFrame(
         container,
@@ -108,11 +108,11 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         bd=2
     )
     output_frame.pack(fill="both", expand=True)
-    
+
     # Sozlamalar
     settings_inner = tk.Frame(settings_frame, bg=bg_color)
     settings_inner.pack(fill="x", padx=10, pady=10)
-    
+
     # Output format
     format_label = tk.Label(
         settings_inner,
@@ -122,7 +122,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         fg=text_color
     )
     format_label.grid(row=0, column=0, padx=(0, 10), sticky="w")
-    
+
     format_var = tk.StringVar(value="Hex")
     format_combo = ttk.Combobox(
         settings_inner,
@@ -133,7 +133,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         font=("Segoe UI", 9)
     )
     format_combo.grid(row=0, column=1, padx=(0, 20))
-    
+
     # HMAC checkbox
     use_hmac_var = tk.BooleanVar(value=False)
     hmac_check = tk.Checkbutton(
@@ -148,7 +148,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         activeforeground=text_color
     )
     hmac_check.grid(row=0, column=2, padx=(0, 20))
-    
+
     # HMAC kalit
     hmac_key_label = tk.Label(
         settings_inner,
@@ -158,7 +158,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         fg=text_color
     )
     hmac_key_label.grid(row=0, column=3, padx=(0, 10), sticky="w")
-    
+
     hmac_key_entry = tk.Entry(
         settings_inner,
         font=("Consolas", 9),
@@ -171,9 +171,9 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     )
     hmac_key_entry.grid(row=0, column=4, sticky="ew")
     hmac_key_entry.insert(0, "secret_key")
-    
+
     settings_inner.grid_columnconfigure(4, weight=1)
-    
+
     # Input matn
     input_label = tk.Label(
         input_frame,
@@ -183,7 +183,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         fg=text_color
     )
     input_label.pack(anchor="w", padx=10, pady=(5, 0))
-    
+
     input_text = scrolledtext.ScrolledText(
         input_frame,
         font=("Consolas", 10),
@@ -197,7 +197,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
     )
     input_text.pack(fill="both", expand=True, padx=10, pady=(5, 10))
     input_text.insert("1.0", "Hello, World!")
-    
+
     # Output matn
     output_text = scrolledtext.ScrolledText(
         output_frame,
@@ -211,20 +211,20 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         insertbackground=text_color
     )
     output_text.pack(fill="both", expand=True, padx=10, pady=10)
-    
+
     # Hash hisoblash
     def calculate_hash():
         try:
             output_text.delete("1.0", tk.END)
-            
+
             # Input olish
             message = input_text.get("1.0", tk.END).strip()
             if not message:
                 messagebox.showwarning("Ogohlantirish", "Xabar kiriting!")
                 return
-            
+
             message_bytes = message.encode('utf-8')
-            
+
             # Hash funksiyani tanlash
             if algorithm == "md5":
                 hash_func = hashlib.md5
@@ -234,7 +234,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 hash_func = hashlib.sha256
             elif algorithm == "sha512":
                 hash_func = hashlib.sha512
-            
+
             # HMAC yoki oddiy hash
             if use_hmac_var.get():
                 key = hmac_key_entry.get().encode('utf-8')
@@ -245,14 +245,14 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 hash_obj = hash_func(message_bytes)
                 hash_bytes = hash_obj.digest()
                 hash_type = algorithm.upper()
-            
+
             # Format tanlash
             output_format = format_var.get()
-            
+
             output_text.insert(tk.END, "=" * 70 + "\n")
             output_text.insert(tk.END, f"{hash_type} HASH NATIJASI\n")
             output_text.insert(tk.END, "=" * 70 + "\n\n")
-            
+
             # Xabar ma'lumotlari
             output_text.insert(tk.END, "KIRISH MA'LUMOTLARI:\n")
             output_text.insert(tk.END, "─" * 70 + "\n")
@@ -261,30 +261,30 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
             if use_hmac_var.get():
                 output_text.insert(tk.END, f"HMAC kaliti: {hmac_key_entry.get()}\n")
             output_text.insert(tk.END, "\n")
-            
+
             # Hash ma'lumotlari
             output_text.insert(tk.END, "HASH MA'LUMOTLARI:\n")
             output_text.insert(tk.END, "─" * 70 + "\n")
             output_text.insert(tk.END, f"Algoritm: {hash_type}\n")
             output_text.insert(tk.END, f"Hash o'lchami: {info['hash_size']} bit ({info['hash_size']//8} byte)\n")
             output_text.insert(tk.END, "\n")
-            
+
             # Hash natijasi
             output_text.insert(tk.END, "HASH QIYMATI:\n")
             output_text.insert(tk.END, "─" * 70 + "\n\n")
-            
+
             if output_format == "Hex":
                 hash_str = binascii.hexlify(hash_bytes).decode().upper()
                 output_text.insert(tk.END, "Hex format:\n")
                 # 16 baytdan keyin yangi qator
                 for i in range(0, len(hash_str), 32):
                     output_text.insert(tk.END, f"  {hash_str[i:i+32]}\n")
-                
+
             elif output_format == "Base64":
                 hash_str = base64.b64encode(hash_bytes).decode()
                 output_text.insert(tk.END, "Base64 format:\n")
                 output_text.insert(tk.END, f"  {hash_str}\n")
-                
+
             elif output_format == "Binary":
                 hash_str = ' '.join(format(byte, '08b') for byte in hash_bytes)
                 output_text.insert(tk.END, "Binary format:\n")
@@ -292,15 +292,15 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 binary_parts = hash_str.split()
                 for i in range(0, len(binary_parts), 8):
                     output_text.insert(tk.END, f"  {' '.join(binary_parts[i:i+8])}\n")
-            
+
             output_text.insert(tk.END, "\n")
-            
+
             # Qo'shimcha ma'lumotlar
             output_text.insert(tk.END, "QISQA XULOSA:\n")
             output_text.insert(tk.END, "─" * 70 + "\n")
             output_text.insert(tk.END, f"Hash: {binascii.hexlify(hash_bytes).decode().upper()}\n")
             output_text.insert(tk.END, "\n")
-            
+
             # Xususiyatlar
             output_text.insert(tk.END, "XUSUSIYATLAR:\n")
             output_text.insert(tk.END, "─" * 70 + "\n")
@@ -320,35 +320,27 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 output_text.insert(tk.END, "• Eng xavfsiz\n")
                 output_text.insert(tk.END, "• ✓ Katta xavfsizlik marjini\n")
                 output_text.insert(tk.END, "• Maxfiy ma'lumotlar uchun tavsiya etiladi\n")
-            
+
         except Exception as e:
             messagebox.showerror("Xato", f"Hash hisoblashda xatolik:\n{str(e)}")
-    
+
     # Taqqoslash funksiyasi
     def compare_hash():
         try:
             # Yangi oyna
             compare_window = tk.Toplevel(root)
-            compare_window.title("Hash Taqqoslash")
             compare_window.geometry("600x400")
             compare_window.configure(bg=bg_color)
-            
+
             # Markazga joylashtirish
             screen_width = compare_window.winfo_screenwidth()
             screen_height = compare_window.winfo_screenheight()
             x = (screen_width - 600) // 2
             y = (screen_height - 400) // 2
             compare_window.geometry(f"600x400+{x}+{y}")
-            
-            title = tk.Label(
-                compare_window,
-                text="Hash Taqqoslash",
-                font=("Segoe UI", 14, "bold"),
-                bg=bg_color,
-                fg=accent_color
-            )
-            title.pack(pady=20)
-            
+
+
+
             # Hash 1
             hash1_label = tk.Label(
                 compare_window,
@@ -358,7 +350,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 fg=text_color
             )
             hash1_label.pack(pady=(10, 5))
-            
+
             hash1_entry = tk.Entry(
                 compare_window,
                 font=("Consolas", 10),
@@ -370,7 +362,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 width=60
             )
             hash1_entry.pack(pady=5, padx=20)
-            
+
             # Hash 2
             hash2_label = tk.Label(
                 compare_window,
@@ -380,7 +372,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 fg=text_color
             )
             hash2_label.pack(pady=(20, 5))
-            
+
             hash2_entry = tk.Entry(
                 compare_window,
                 font=("Consolas", 10),
@@ -392,7 +384,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 width=60
             )
             hash2_entry.pack(pady=5, padx=20)
-            
+
             # Natija label
             result_label = tk.Label(
                 compare_window,
@@ -402,20 +394,20 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 fg=text_color
             )
             result_label.pack(pady=30)
-            
+
             def do_compare():
                 hash1 = hash1_entry.get().strip().upper()
                 hash2 = hash2_entry.get().strip().upper()
-                
+
                 if not hash1 or not hash2:
                     result_label.config(text="Ikkala hash ni kiriting!", fg="#f87171")
                     return
-                
+
                 if hash1 == hash2:
                     result_label.config(text="✓ HASH'LAR BIR XIL!", fg="#4ade80")
                 else:
                     result_label.config(text="✗ HASH'LAR FARQLI!", fg="#f87171")
-            
+
             compare_btn = tk.Button(
                 compare_window,
                 text="Taqqoslash",
@@ -429,14 +421,14 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
                 cursor="hand2"
             )
             compare_btn.pack(pady=10)
-            
+
         except Exception as e:
             messagebox.showerror("Xato", f"Xatolik:\n{str(e)}")
-    
+
     # Tozalash
     def clear_all():
         output_text.delete("1.0", tk.END)
-    
+
     # Nusxa olish
     def copy_hash():
         try:
@@ -452,11 +444,11 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
             messagebox.showwarning("Ogohlantirish", "Hash topilmadi!")
         except Exception as e:
             messagebox.showerror("Xato", f"Nusxa olishda xatolik:\n{str(e)}")
-    
+
     # Buttonlar
     button_frame = tk.Frame(root, bg=bg_color)
     button_frame.pack(pady=(5, 15))
-    
+
     calc_btn = tk.Button(
         button_frame,
         text="Hash Hisoblash",
@@ -471,7 +463,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         activebackground="#c93850"
     )
     calc_btn.pack(side="left", padx=5)
-    
+
     compare_btn = tk.Button(
         button_frame,
         text="Taqqoslash",
@@ -486,7 +478,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         activebackground="#2563eb"
     )
     compare_btn.pack(side="left", padx=5)
-    
+
     copy_btn = tk.Button(
         button_frame,
         text="Nusxa Olish",
@@ -501,7 +493,7 @@ def show_hash_interface(root, algorithm, back_command, bg_color, button_color, t
         activebackground="#7c3aed"
     )
     copy_btn.pack(side="left", padx=5)
-    
+
     clear_btn = tk.Button(
         button_frame,
         text="Tozalash",

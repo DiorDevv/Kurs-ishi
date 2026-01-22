@@ -19,67 +19,59 @@ class CryptoApp:
         self.root = tk.Tk()
         self.root.title("Kriptografik Algoritmlar Tadqiqoti")
         self.root.geometry("1200x820")
-        self.root.resizable(False, False)
+        self.root.resizable(True, True)
 
-        # Markazga joylashtirish
-        self.center_window(1200, 820)
+        # Maksimal qilish (Ubuntu)
+        try:
+            self.root.state("zoomed")
+        except Exception:
+            pass
 
-        # Ranglar va stillar
-        self.bg_color = "#1a1a2e"
-        self.card_color = "#141428"      # NEW (dizayn uchun)
-        self.border_color = "#2a2a4a"    # NEW (dizayn uchun)
+        # ====== RANGLAR (SIZ AYTGANDAY) ======
+        self.bg_color = "#0b0b0f"        # ORQA FON QORA
+        self.card_color = "#10101a"      # card qoraroq
+        self.border_color = "#1e2033"    # border
 
-        self.button_color = "#16213e"
-        self.button_hover = "#0f3460"
-        self.text_color = "#eee"
-        self.accent_color = "#e94560"
-        self.success_color = "#4ade80"
+        self.button_color = "#0a2a5a"    # TO'Q KO'K
+        self.button_hover = "#103a7a"    # hover (biroz ochroq ko'k)
+        self.text_color = "#f2f2f2"
+        self.accent_color = "#ff4d6d"    # sarlavha accent
 
         self.root.configure(bg=self.bg_color)
 
-        # Default fontlar (dizayn)
-        self.base_font = ("Segoe UI", 12)
-        self.btn_font = ("Segoe UI", 12, "bold")
-        self.title_font = ("Segoe UI", 28, "bold")
-        self.sub_title_font = ("Segoe UI", 13)
+        # ====== FONTLAR (KATTA) ======
+        self.title_font = ("Segoe UI", 32, "bold")
+        self.sub_title_font = ("Segoe UI", 16)
+        self.btn_font = ("Segoe UI", 20, "bold")   # BUTTON TEXT KATTA
 
         self.show_main_menu()
 
-    def center_window(self, width, height):
-        """Oynani ekran markaziga joylashtirish"""
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
-        x = (screen_width - width) // 2
-        y = (screen_height - height) // 2
-        self.root.geometry(f"{width}x{height}+{x}+{y}")
-
+    # ---------------- CORE ----------------
     def clear_window(self):
-        """Oynani tozalash"""
         for widget in self.root.winfo_children():
             widget.destroy()
 
-    # ===================== NEW: Card wrapper (faqat dizayn) =====================
+    # ---------------- UI HELPERS ----------------
     def make_card(self, parent, title_text, pady=(0, 0)):
         outer = tk.Frame(parent, bg=self.border_color)
-        outer.pack(fill="x", pady=pady)
+        outer.pack(fill="both", expand=True, pady=pady)
 
         inner = tk.Frame(outer, bg=self.card_color)
-        inner.pack(fill="x", padx=2, pady=2)
+        inner.pack(fill="both", expand=True, padx=2, pady=2)
 
         header = tk.Label(
             inner,
             text=title_text,
-            font=("Segoe UI", 14, "bold"),
+            font=("Segoe UI", 18, "bold"),
             bg=self.card_color,
             fg=self.text_color
         )
-        header.pack(anchor="w", padx=18, pady=(14, 8))
+        header.pack(anchor="w", padx=20, pady=(16, 10))
 
         body = tk.Frame(inner, bg=self.card_color)
-        body.pack(fill="x", padx=18, pady=(0, 16))
+        body.pack(fill="both", expand=True, padx=20, pady=(0, 20))
         return body
 
-    # ===================== NEW: Styled nav button (faqat dizayn) =====================
     def create_nav_button(self, text, command):
         btn = tk.Button(
             self.root,
@@ -87,10 +79,10 @@ class CryptoApp:
             command=command,
             bg=self.button_color,
             fg=self.text_color,
-            font=("Segoe UI", 11, "bold"),
+            font=("Segoe UI", 14, "bold"),
             relief=tk.FLAT,
-            padx=16,
-            pady=10,
+            padx=18,
+            pady=12,
             cursor="hand2",
             activebackground=self.button_hover,
             activeforeground=self.text_color,
@@ -102,8 +94,7 @@ class CryptoApp:
         btn.bind("<Leave>", lambda e: btn.config(bg=self.button_color))
         return btn
 
-    def create_styled_button(self, parent, text, command, row, pady=10):
-        """Stilizatsiyalangan button yaratish"""
+    def create_styled_button(self, parent, text, command, row, col=0, colspan=1, padx=18, pady=18):
         btn = tk.Button(
             parent,
             text=text,
@@ -112,74 +103,119 @@ class CryptoApp:
             fg=self.text_color,
             font=self.btn_font,
             relief=tk.FLAT,
-            padx=24,
-            pady=18,
+            padx=38,      # tugma kattaroq
+            pady=26,      # tugma kattaroq
             cursor="hand2",
             activebackground=self.button_hover,
             activeforeground=self.text_color,
             bd=0,
             highlightthickness=0
         )
-        btn.grid(row=row, column=0, pady=pady, padx=30, sticky="ew")
-
-        # Hover effekti
+        btn.grid(row=row, column=col, columnspan=colspan, padx=padx, pady=pady, sticky="nsew")
         btn.bind("<Enter>", lambda e: btn.config(bg=self.button_hover))
         btn.bind("<Leave>", lambda e: btn.config(bg=self.button_color))
-
         return btn
 
+    def build_two_col_menu(self, title_text, subtitle_text, card_title, items, back_command):
+        """
+        items: list of (text, command)
+        """
+        self.clear_window()
+        self.create_nav_button("← Orqaga", back_command)
+
+        tk.Label(
+            self.root,
+            text=title_text,
+            font=("Segoe UI", 28, "bold"),
+            bg=self.bg_color,
+            fg=self.accent_color
+        ).pack(pady=(70, 12))
+
+        if subtitle_text:
+            tk.Label(
+                self.root,
+                text=subtitle_text,
+                font=("Segoe UI", 16),
+                bg=self.bg_color,
+                fg=self.text_color
+            ).pack(pady=(0, 16))
+
+        content = tk.Frame(self.root, bg=self.bg_color)
+        content.pack(fill="both", expand=True, padx=70, pady=(0, 20))
+
+        card_body = self.make_card(content, card_title)
+
+        grid = tk.Frame(card_body, bg=self.card_color)
+        grid.pack(fill="both", expand=True)
+
+        grid.grid_columnconfigure(0, weight=1, uniform="col")
+        grid.grid_columnconfigure(1, weight=1, uniform="col")
+
+        rows_needed = (len(items) + 1) // 2
+        for r in range(rows_needed):
+            grid.grid_rowconfigure(r, weight=1)
+
+        for i, (text, cmd) in enumerate(items):
+            r = i // 2
+            c = i % 2
+
+            is_last = (i == len(items) - 1)
+            if is_last and (len(items) % 2 == 1):
+                self.create_styled_button(grid, text, cmd, row=r, col=0, colspan=2)
+            else:
+                self.create_styled_button(grid, text, cmd, row=r, col=c, colspan=1)
+
+    # ---------------- MAIN MENU ----------------
     def show_main_menu(self):
-        """Asosiy menyu"""
         self.clear_window()
 
-        # Top header (dizayn)
         header = tk.Frame(self.root, bg=self.bg_color)
-        header.pack(fill="x", pady=(28, 10))
+        header.pack(fill="x", pady=(30, 10))
 
-        title = tk.Label(
+        tk.Label(
             header,
             text="Kriptografik Algoritmlar",
             font=self.title_font,
             bg=self.bg_color,
             fg=self.accent_color
-        )
-        title.pack()
+        ).pack()
 
-        subtitle = tk.Label(
+        tk.Label(
             header,
-            text="Algoritmni tanlang (DSA, AES, RSA va boshqalar)",
+            text="4 ta bo‘lim: ERI, PTRR, SHA, Kalit generatsiya",
             font=self.sub_title_font,
             bg=self.bg_color,
             fg=self.text_color
-        )
-        subtitle.pack(pady=(6, 0))
+        ).pack(pady=(8, 0))
 
-        # Card ichida buttonlar
         main_area = tk.Frame(self.root, bg=self.bg_color)
-        main_area.pack(fill="both", expand=True, padx=60, pady=(10, 10))
+        main_area.pack(fill="both", expand=True, padx=70, pady=20)
 
-        card_body = self.make_card(main_area, "📌 Menyu", pady=(0, 0))
+        card = self.make_card(main_area, "📌 Asosiy bo‘limlar")
 
-        btn_frame = tk.Frame(card_body, bg=self.card_color)
-        btn_frame.pack(fill="both", expand=True)
-        btn_frame.grid_columnconfigure(0, weight=1)
+        grid = tk.Frame(card, bg=self.card_color)
+        grid.pack(fill="both", expand=True)
 
-        algorithms = [
-            ("1. Elektron Raqamli Imzo (DSA, El-Gamal, RSA)", self.show_digital_signature),
-            ("2. Simmetrik Shifrlash (Blowfish, CAST, AES)", self.show_symmetric),
-            ("3. Pseudo Tasodifiy Generatorlar", self.show_prng_menu),
-            ("4. Hash Funksiyalari (MD5, SHA)", self.show_hash),
-            ("5. Autentifikatsiyalash Protokollari", self.show_auth),
-            ("6. Oqimli Shifrlash (A5/1, RC4)", self.show_stream),
-            ("7. Assimetrik Shifrlash (RSA, El-Gamal)", self.show_asymmetric)
+        grid.grid_columnconfigure(0, weight=1, uniform="col")
+        grid.grid_columnconfigure(1, weight=1, uniform="col")
+        grid.grid_rowconfigure(0, weight=1)
+        grid.grid_rowconfigure(1, weight=1)
+
+        sections = [
+            ("🔏 ERI — Elektron Raqamli Imzo", self.show_eri_section),
+            ("🎲 PTRR — Pseudo Tasodifiy Generatorlar", self.show_prng_menu),
+            ("🧾 SHA — Hash Funksiyalari", self.show_sha_section),
+            ("🔑 Kalit Generatsiya — Shifrlash & Protokollar", self.show_keygen_section),
         ]
 
-        for i, (text, command) in enumerate(algorithms):
-            self.create_styled_button(btn_frame, text, command, i, pady=8)
+        for i, (text, command) in enumerate(sections):
+            r = i // 2
+            c = i % 2
+            self.create_styled_button(grid, text, command, row=r, col=c)
 
-        # Pastki action bar
+        # Exit
         footer = tk.Frame(self.root, bg=self.bg_color)
-        footer.pack(fill="x", pady=(0, 18))
+        footer.pack(fill="x", pady=(0, 22))
 
         exit_btn = tk.Button(
             footer,
@@ -187,123 +223,98 @@ class CryptoApp:
             command=self.root.quit,
             bg=self.accent_color,
             fg=self.text_color,
-            font=("Segoe UI", 12, "bold"),
+            font=("Segoe UI", 16, "bold"),
             relief=tk.FLAT,
-            padx=34,
-            pady=12,
+            padx=44,
+            pady=16,
             cursor="hand2",
-            activebackground="#c93850",
-            activeforeground=self.text_color
+            activebackground="#e03a5b",
+            activeforeground=self.text_color,
+            bd=0,
+            highlightthickness=0
         )
         exit_btn.pack()
-        exit_btn.bind("<Enter>", lambda e: exit_btn.config(bg="#c93850"))
+        exit_btn.bind("<Enter>", lambda e: exit_btn.config(bg="#e03a5b"))
         exit_btn.bind("<Leave>", lambda e: exit_btn.config(bg=self.accent_color))
 
-    def show_prng_menu(self):
-        """PRNG turlarini tanlash"""
-        self.clear_window()
-
-        self.create_nav_button("← Orqaga", self.show_main_menu)
-
-        title = tk.Label(
-            self.root,
-            text="Pseudo Tasodifiy Generatorlar",
-            font=("Segoe UI", 24, "bold"),
-            bg=self.bg_color,
-            fg=self.accent_color
-        )
-        title.pack(pady=(55, 10))
-
-        subtitle = tk.Label(
-            self.root,
-            text="Generator turini tanlang",
-            font=("Segoe UI", 13),
-            bg=self.bg_color,
-            fg=self.text_color
-        )
-        subtitle.pack(pady=(0, 14))
-
-        content = tk.Frame(self.root, bg=self.bg_color)
-        content.pack(fill="both", expand=True, padx=80, pady=10)
-
-        card_body = self.make_card(content, "⚙️ PRNG Turlari", pady=(0, 0))
-
-        btn_frame = tk.Frame(card_body, bg=self.card_color)
-        btn_frame.pack(expand=True)
-        btn_frame.grid_columnconfigure(0, weight=1)
-
-        types = [
-            ("Elementar Generatorlar", self.show_elementary_menu),
-            ("Murakkab Generatorlar", self.show_complex_menu),
-            ("Siljitish Registrli Generatorlar", self.show_shift_menu)
+    # ---------------- 1) ERI ----------------
+    def show_eri_section(self):
+        items = [
+            ("✍️ DSA (Digital Signature Algorithm)", lambda: self.show_signature("dsa")),
+            ("🧾 El-Gamal Signature", lambda: self.show_signature("elgamal")),
+            ("🔐 RSA Signature", lambda: self.show_signature("rsa")),
         ]
+        self.build_two_col_menu(
+            title_text="🔏 ERI — Elektron Raqamli Imzo",
+            subtitle_text="Imzo algoritmini tanlang",
+            card_title="📌 ERI Variantlar",
+            items=items,
+            back_command=self.show_main_menu
+        )
 
-        for i, (text, command) in enumerate(types):
-            self.create_styled_button(btn_frame, text, command, i, pady=14)
+    def show_signature(self, algorithm):
+        self.clear_window()
+        digital_signature.show_signature_interface(
+            self.root, algorithm, self.show_eri_section,
+            self.bg_color, self.button_color, self.text_color, self.accent_color
+        )
+
+    # ---------------- 2) PTRR ----------------
+    def show_prng_menu(self):
+        items = [
+            ("🧩 Elementar Generatorlar", self.show_elementary_menu),
+            ("🧠 Murakkab Generatorlar", self.show_complex_menu),
+            ("📡 Siljitish Registrli Generatorlar", self.show_shift_menu),
+        ]
+        self.build_two_col_menu(
+            title_text="🎲 PTRR — Pseudo Tasodifiy Generatorlar",
+            subtitle_text="Generator turini tanlang",
+            card_title="⚙️ PTRR Turlari",
+            items=items,
+            back_command=self.show_main_menu
+        )
 
     def show_elementary_menu(self):
-        """Elementar generatorlar - Arduino kodidagi"""
-        self.clear_window()
-        self.create_submenu("Elementar Generatorlar", [
-            ("1. Chiziqli", lambda: self.show_algorithm("elementary", "linear")),
-            ("2. Nochiziqli", lambda: self.show_algorithm("elementary", "nonlinear"))
-        ], self.show_prng_menu)
+        items = [
+            ("➗ Chiziqli", lambda: self.show_algorithm("elementary", "linear")),
+            ("➕ Nochiziqli", lambda: self.show_algorithm("elementary", "nonlinear")),
+        ]
+        self.build_two_col_menu(
+            title_text="🧩 Elementar Generatorlar",
+            subtitle_text="Turini tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_prng_menu
+        )
 
     def show_complex_menu(self):
-        """Murakkab generatorlar - Arduino kodidagi"""
-        self.clear_window()
-        self.create_submenu("Murakkab Generatorlar", [
-            ("1. RSA", lambda: self.show_algorithm("complex", "rsa")),
-            ("2. BBS", lambda: self.show_algorithm("complex", "bbs")),
-            ("3. Blyum-Mikali", lambda: self.show_algorithm("complex", "blum_micali"))
-        ], self.show_prng_menu)
+        items = [
+            ("🔐 RSA", lambda: self.show_algorithm("complex", "rsa")),
+            ("🎲 BBS", lambda: self.show_algorithm("complex", "bbs")),
+            ("🧠 Blum-Micali", lambda: self.show_algorithm("complex", "blum_micali")),
+        ]
+        self.build_two_col_menu(
+            title_text="🧠 Murakkab Generatorlar",
+            subtitle_text="Turini tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_prng_menu
+        )
 
     def show_shift_menu(self):
-        """Siljitish registrli generatorlar - Arduino kodidagi"""
-        self.clear_window()
-        self.create_submenu("Siljitish Registrli Generatorlar", [
-            ("1. A5/1 Algoritmi", lambda: self.show_algorithm("shift", "a51"))
-        ], self.show_prng_menu)
-
-    def create_submenu(self, title_text, buttons, back_command):
-        """Submenu yaratish"""
-        self.create_nav_button("← Orqaga", back_command)
-
-        title = tk.Label(
-            self.root,
-            text=title_text,
-            font=("Segoe UI", 24, "bold"),
-            bg=self.bg_color,
-            fg=self.accent_color
+        items = [
+            ("📡 A5/1 Algoritmi", lambda: self.show_algorithm("shift", "a51")),
+        ]
+        self.build_two_col_menu(
+            title_text="📡 Siljitish Registrli Generatorlar",
+            subtitle_text="Algoritmni tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_prng_menu
         )
-        title.pack(pady=(55, 10))
-
-        subtitle = tk.Label(
-            self.root,
-            text="Tanlang",
-            font=("Segoe UI", 13),
-            bg=self.bg_color,
-            fg=self.text_color
-        )
-        subtitle.pack(pady=(0, 14))
-
-        content = tk.Frame(self.root, bg=self.bg_color)
-        content.pack(fill="both", expand=True, padx=80, pady=10)
-
-        card_body = self.make_card(content, "📌 Variantlar", pady=(0, 0))
-
-        btn_frame = tk.Frame(card_body, bg=self.card_color)
-        btn_frame.pack(expand=True)
-        btn_frame.grid_columnconfigure(0, weight=1)
-
-        for i, (text, command) in enumerate(buttons):
-            self.create_styled_button(btn_frame, text, command, i, pady=14)
 
     def show_algorithm(self, algo_type, subtype):
-        """Algoritm oynasini ko'rsatish"""
         self.clear_window()
-
-        # Bu yerda prng moduli ishlatiladi
         prng.show_prng_interface(
             self.root, algo_type, subtype,
             self.show_prng_menu, self.bg_color,
@@ -311,86 +322,80 @@ class CryptoApp:
             self.accent_color
         )
 
-    # Boshqa algoritmlar uchun funksiyalar
-    def show_digital_signature(self):
-        """Elektron Raqamli Imzo"""
-        self.clear_window()
-        self.create_submenu("Elektron Raqamli Imzo", [
-            ("DSA (Digital Signature Algorithm)", lambda: self.show_signature("dsa")),
-            ("El-Gamal Signature", lambda: self.show_signature("elgamal")),
-            ("RSA Signature", lambda: self.show_signature("rsa"))
-        ], self.show_main_menu)
+    # ---------------- 3) SHA ----------------
+    def show_sha_section(self):
+        items = [
+            ("🟠 MD5", lambda: self.show_hash_algo("md5")),
+            ("🔵 SHA-1", lambda: self.show_hash_algo("sha1")),
+            ("🟣 SHA-256", lambda: self.show_hash_algo("sha256")),
+            ("🟢 SHA-512", lambda: self.show_hash_algo("sha512")),
+        ]
+        self.build_two_col_menu(
+            title_text="🧾 SHA — Hash Funksiyalari",
+            subtitle_text="Hash algoritmini tanlang",
+            card_title="📌 Hash Variantlar",
+            items=items,
+            back_command=self.show_main_menu
+        )
 
-    def show_signature(self, algorithm):
-        """Imzo algoritmi oynasi"""
+    def show_hash_algo(self, algorithm):
         self.clear_window()
-        digital_signature.show_signature_interface(
-            self.root, algorithm, self.show_digital_signature,
+        hash_functions.show_hash_interface(
+            self.root, algorithm, self.show_sha_section,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
+    # ---------------- 4) KALIT GENERATSIYA ----------------
+    def show_keygen_section(self):
+        items = [
+            ("🧊 Simmetrik Shifrlash", self.show_symmetric),
+            ("🌊 Oqimli Shifrlash", self.show_stream),
+            ("🛰️ Assimetrik Shifrlash", self.show_asymmetric),
+            ("🛡️ Autentifikatsiya", self.show_auth),
+        ]
+        self.build_two_col_menu(
+            title_text="🔑 Kalit Generatsiya",
+            subtitle_text="Bo‘limni tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_main_menu
+        )
+
     def show_symmetric(self):
-        """Simmetrik Shifrlash"""
-        self.clear_window()
-        self.create_submenu("Simmetrik Shifrlash", [
-            ("AES (Advanced Encryption Standard)", lambda: self.show_cipher("aes")),
-            ("Blowfish", lambda: self.show_cipher("blowfish")),
-            ("CAST-128", lambda: self.show_cipher("cast"))
-        ], self.show_main_menu)
+        items = [
+            ("🔒 AES", lambda: self.show_cipher("aes")),
+            ("🐡 Blowfish", lambda: self.show_cipher("blowfish")),
+            ("🧱 CAST-128", lambda: self.show_cipher("cast")),
+        ]
+        self.build_two_col_menu(
+            title_text="🧊 Simmetrik Shifrlash",
+            subtitle_text="Algoritmni tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_keygen_section
+        )
 
     def show_cipher(self, algorithm):
-        """Simmetrik shifrlash oynasi"""
         self.clear_window()
         symmetric.show_symmetric_interface(
             self.root, algorithm, self.show_symmetric,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
-    def show_hash(self):
-        """Hash Funksiyalari"""
-        self.clear_window()
-        self.create_submenu("Hash Funksiyalari", [
-            ("MD5", lambda: self.show_hash_algo("md5")),
-            ("SHA-1", lambda: self.show_hash_algo("sha1")),
-            ("SHA-256", lambda: self.show_hash_algo("sha256")),
-            ("SHA-512", lambda: self.show_hash_algo("sha512"))
-        ], self.show_main_menu)
-
-    def show_hash_algo(self, algorithm):
-        """Hash algoritmi oynasi"""
-        self.clear_window()
-        hash_functions.show_hash_interface(
-            self.root, algorithm, self.show_hash,
-            self.bg_color, self.button_color, self.text_color, self.accent_color
-        )
-
-    def show_auth(self):
-        """Autentifikatsiyalash Protokollari"""
-        self.clear_window()
-        self.create_submenu("Autentifikatsiyalash Protokollari", [
-            ("Challenge-Response", lambda: self.show_auth_protocol("challenge_response")),
-            ("Needham-Schroeder", lambda: self.show_auth_protocol("needham_schroeder")),
-            ("Kerberos", lambda: self.show_auth_protocol("kerberos"))
-        ], self.show_main_menu)
-
-    def show_auth_protocol(self, protocol):
-        """Autentifikatsiya protokoli oynasi"""
-        self.clear_window()
-        authentication.show_auth_interface(
-            self.root, protocol, self.show_auth,
-            self.bg_color, self.button_color, self.text_color, self.accent_color
-        )
-
     def show_stream(self):
-        """Oqimli Shifrlash"""
-        self.clear_window()
-        self.create_submenu("Oqimli Shifrlash", [
-            ("RC4 (Rivest Cipher 4)", lambda: self.show_stream_cipher("rc4")),
-            ("A5/1 Stream Cipher", lambda: self.show_stream_cipher("a51"))
-        ], self.show_main_menu)
+        items = [
+            ("🌊 RC4", lambda: self.show_stream_cipher("rc4")),
+            ("📡 A5/1", lambda: self.show_stream_cipher("a51")),
+        ]
+        self.build_two_col_menu(
+            title_text="🌊 Oqimli Shifrlash",
+            subtitle_text="Algoritmni tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_keygen_section
+        )
 
     def show_stream_cipher(self, algorithm):
-        """Oqimli shifrlash oynasi"""
         self.clear_window()
         stream_cipher.show_stream_interface(
             self.root, algorithm, self.show_stream,
@@ -398,41 +403,49 @@ class CryptoApp:
         )
 
     def show_asymmetric(self):
-        """Assimetrik Shifrlash"""
-        self.clear_window()
-        self.create_submenu("Assimetrik Shifrlash", [
-            ("RSA (Rivest-Shamir-Adleman)", lambda: self.show_asymmetric_cipher("rsa")),
-            ("El-Gamal Encryption", lambda: self.show_asymmetric_cipher("elgamal"))
-        ], self.show_main_menu)
+        items = [
+            ("🛰️ RSA", lambda: self.show_asymmetric_cipher("rsa")),
+            ("📨 El-Gamal", lambda: self.show_asymmetric_cipher("elgamal")),
+        ]
+        self.build_two_col_menu(
+            title_text="🛰️ Assimetrik Shifrlash",
+            subtitle_text="Algoritmni tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_keygen_section
+        )
 
     def show_asymmetric_cipher(self, algorithm):
-        """Assimetrik shifrlash oynasi"""
         self.clear_window()
         asymmetric.show_asymmetric_interface(
             self.root, algorithm, self.show_asymmetric,
             self.bg_color, self.button_color, self.text_color, self.accent_color
         )
 
-    def show_placeholder(self, title):
-        """Placeholder oyna"""
-        self.clear_window()
-
-        self.create_nav_button("← Orqaga", self.show_main_menu)
-
-        label = tk.Label(
-            self.root,
-            text=f"{title}\n\n(Tez kunda qo'shiladi)",
-            font=("Segoe UI", 18),
-            bg=self.bg_color,
-            fg=self.text_color
+    def show_auth(self):
+        items = [
+            ("🛡️ Challenge-Response", lambda: self.show_auth_protocol("challenge_response")),
+            ("🔁 Needham-Schroeder", lambda: self.show_auth_protocol("needham_schroeder")),
+            ("🎟️ Kerberos", lambda: self.show_auth_protocol("kerberos")),
+        ]
+        self.build_two_col_menu(
+            title_text="🛡️ Autentifikatsiya",
+            subtitle_text="Protokolni tanlang",
+            card_title="📌 Variantlar",
+            items=items,
+            back_command=self.show_keygen_section
         )
-        label.pack(expand=True)
+
+    def show_auth_protocol(self, protocol):
+        self.clear_window()
+        authentication.show_auth_interface(
+            self.root, protocol, self.show_auth,
+            self.bg_color, self.button_color, self.text_color, self.accent_color
+        )
 
     def run(self):
-        """Ilovani ishga tushirish"""
         self.root.mainloop()
 
 
 if __name__ == "__main__":
-    app = CryptoApp()
-    app.run()
+    CryptoApp().run()
