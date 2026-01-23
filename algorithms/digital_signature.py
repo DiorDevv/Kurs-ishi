@@ -349,6 +349,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
             result_text.insert(tk.END, "2. XABAR VA HASH:\n")
             result_text.insert(tk.END, "-" * 58 + "\n")
             result_text.insert(tk.END, f"   Xabar: \"{message}\"\n")
+            result_text.insert(tk.END, f"   Hash (SHA-256): {hex(h)[:50]}...\n")
             result_text.insert(tk.END, f"   Hash mod q: {h_mod}\n\n")
 
             # Tasodifiy k
@@ -428,6 +429,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
             result_text.insert(tk.END, "2. XABAR VA HASH:\n")
             result_text.insert(tk.END, "-" * 58 + "\n")
             result_text.insert(tk.END, f"   Xabar: \"{message}\"\n")
+            result_text.insert(tk.END, f"   Hash (SHA-256): {hex(h)[:50]}...\n")
             result_text.insert(tk.END, f"   Hash mod (p-1): {h_mod}\n\n")
 
             # Tasodifiy k

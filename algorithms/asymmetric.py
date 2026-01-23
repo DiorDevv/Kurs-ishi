@@ -349,10 +349,10 @@ def show_asymmetric_interface(root, algorithm, back_command, home_command, bg_co
         relief=tk.FLAT,
         bd=2,
         wrap=tk.WORD,
-        height=1,
+        height=15,
         insertbackground=text_color
     )
-    input_text.pack(fill="both", expand=True, padx=12, pady=(8, 12))
+    input_text.pack(fill="both", expand=False, padx=12, pady=(8, 12))
     input_text.insert("1.0", "Hello!")
 
     # Output matn
@@ -364,9 +364,10 @@ def show_asymmetric_interface(root, algorithm, back_command, home_command, bg_co
         relief=tk.FLAT,
         bd=2,
         wrap=tk.WORD,
+        height=15,
         insertbackground=text_color
     )
-    output_text.pack(fill="both", expand=True, padx=12, pady=(8, 12))
+    output_text.pack(fill="both", expand=False, padx=12, pady=(8, 12))
 
     # Yordamchi funksiyalar
     def mod_pow(base, exp, mod):

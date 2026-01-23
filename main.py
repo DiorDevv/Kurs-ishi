@@ -28,6 +28,7 @@ class CryptoApp:
             self.root.state("zoomed")
         except Exception:
             pass
+        self.root.minsize(1700, 950)
 
         # ====== RANGLAR (SIZ AYTGANDAY) ======
         self.bg_color = "#0b0b0f"        # ORQA FON QORA
