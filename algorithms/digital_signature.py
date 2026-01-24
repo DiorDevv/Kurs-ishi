@@ -409,6 +409,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
             # Ochiq kalit
             y = mod_pow(g, x, p)
 
+
             result_text.insert(tk.END, "=" * 58 + "\n")
             result_text.insert(tk.END, "EL-GAMAL ELEKTRON RAQAMLI IMZO\n")
             result_text.insert(tk.END, "=" * 58 + "\n\n")
