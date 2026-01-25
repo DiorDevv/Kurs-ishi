@@ -426,6 +426,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
             result_text.insert(tk.END, f"   Maxfiy kalit: x = {x}\n\n")
 
             # Hash
+
             h = hash_message(message)
             h_mod = h % (p - 1)
             result_text.insert(tk.END, "2. XABAR VA HASH:\n")
