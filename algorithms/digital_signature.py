@@ -17,6 +17,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
         nav_frame,
         text="← Orqaga",
         command=back_command,
+
         bg=button_color,
         fg=text_color,
         font=("Segoe UI", 12, "bold"),
