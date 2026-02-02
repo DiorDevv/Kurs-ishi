@@ -28,6 +28,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
         activeforeground=text_color
 
     )
+
     back_btn.pack(side="left", padx=(0, 10))
     back_btn.bind("<Enter>", lambda e: back_btn.config(bg="#103a7a"))
     back_btn.bind("<Leave>", lambda e: back_btn.config(bg=button_color))

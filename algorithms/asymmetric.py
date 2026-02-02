@@ -352,6 +352,7 @@ def show_asymmetric_interface(root, algorithm, back_command, home_command, bg_co
         height=15,
         insertbackground=text_color
     )
+
     input_text.pack(fill="both", expand=False, padx=12, pady=(8, 12))
     input_text.insert("1.0", "Hello!")
 
