@@ -16,6 +16,7 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
     back_btn = tk.Button(
         nav_frame,
         text="← Orqaga",
+
         command=back_command,
         bg=button_color,
         fg=text_color,

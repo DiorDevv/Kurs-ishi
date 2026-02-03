@@ -333,6 +333,7 @@ def show_asymmetric_interface(root, algorithm, back_command, home_command, bg_co
         font=("Consolas", 12),
         bg=button_color,
         fg=text_color,
+
         relief=tk.FLAT,
         bd=2,
         wrap=tk.WORD,
