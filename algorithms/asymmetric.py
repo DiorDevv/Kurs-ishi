@@ -578,3 +578,17 @@ def show_asymmetric_interface(root, algorithm, back_command, home_command, bg_co
         cursor="hand2"
     )
     clear_btn.pack(side="left", padx=8)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

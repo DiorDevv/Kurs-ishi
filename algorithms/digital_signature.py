@@ -513,3 +513,15 @@ def show_signature_interface(root, algorithm, back_command, home_command, bg_col
         cursor="hand2"
     )
     clear_btn.pack(side="left", padx=8)
+
+
+
+
+
+
+
+
+
+
+
+
