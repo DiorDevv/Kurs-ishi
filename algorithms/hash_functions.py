@@ -50,6 +50,7 @@ def show_hash_interface(root, algorithm, back_command, home_command, bg_color, b
     home_btn.bind("<Enter>", lambda e: home_btn.config(bg="#059669"))
     home_btn.bind("<Leave>", lambda e: home_btn.config(bg="#10b981"))
 
+
     # Algoritm ma'lumotlari
     algo_info = {
         "md5": {
